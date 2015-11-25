@@ -50,3 +50,58 @@ Java：采用AOP思想，开发的DB框架，类似于mybatis。
 	查询多条记录，例：get表名ListBy查询条件字段名称。
 	查询单条记录，例：get表名By查询条件字段名称。
 	查询记录条数：例：get表名ListCount、get表名ListCountBy查询条件字段名称。
+
+**步骤：**
+
+	创建一个XML配置文件
+	创建一个Entitie，该类可用代码生成工具
+	创建一个Dao，该类只用写方法体，不用实现具体代码
+	创建一个Service，即可使用
+
+**XML：**
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<sqlMap id="org.linjia.core.daos.AdminDao">
+		<sqlItem id="doInsert">INSERT INTO admin (admin_id, real_name, nike_name, password) VALUES (#adminId#,#realName#,#nikeName#,#password#) </sqlItem>
+		<sqlItem id="doUpdate">UPDATE admin SET real_name=#realName#, nike_name=#nikeName#, password=#password# WHERE admin_id=#adminId# </sqlItem>
+		<sqlItem id="doDelete">DELETE FROM admin WHERE admin_id=#adminId# </sqlItem>
+		<sqlItem id="doSelect">SELECT admin_id, real_name, nike_name, password FROM admin</sqlItem>
+		<sqlItem id="doRead">SELECT admin_id, real_name, nike_name, password FROM admin WHERE admin_id=#adminId# </sqlItem>
+	</sqlMap>
+
+**entitie：**
+
+	public class Admin implements IDataRow {
+		private String adminId;
+		private String password;
+		public String getAdminId() {
+			return adminId;
+		}
+		public void setAdminId(String adminId) {
+			this.adminId = adminId;
+		}
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
+	}
+
+**dao：**
+
+	public class AdminDao implements ITableDao {
+		public void doDelete(Admin dataRow) {}
+		public void doRead(Admin dataRow) {}
+		public void doSelect(IDataRowSet<Admin> dataRowSet, IRowPager rowPager) {}
+		public void doInsert(Admin dataRow) {}
+		public void doUpdate(Admin dataRow) {}
+	}
+
+**service：**
+
+	public class ReadAdminService {
+		public static void getActivityByID(Admin admin){
+			DaoProxyFactory.createProxy(AdminDao.class).doRead(admin);
+		}
+	}
