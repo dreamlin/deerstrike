@@ -57,6 +57,7 @@ Java：采用AOP思想，开发的DB框架，类似于mybatis。
 	2、创建一个Entitie，该类可用代码生成工具
 	3、创建一个Dao，该类只用写方法体，不用实现具体代码
 	4、创建一个Service，即可使用
+	5、配置DataSource.xml，填写数据源
 
 **XML：**
 
@@ -105,3 +106,27 @@ Java：采用AOP思想，开发的DB框架，类似于mybatis。
 			DaoProxyFactory.createProxy(AdminDao.class).doRead(admin);
 		}
 	}
+
+**DataSource.xml**
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<connMap>
+		<connItem className="cn.maymay.core.daos.AdminDao" connType="write">
+			<dBDriver>com.mysql.jdbc.Driver</dBDriver>
+			<dBDriverUrl>jdbc:mysql://192.168.126.55:3306/</dBDriverUrl>
+			<dBName>db_maymay</dBName>
+			<dBUser>root</dBUser>
+			<dBPwd>maymay</dBPwd>
+			<maxConnSize>1000</maxConnSize>
+			<minConnSiez>10</minConnSiez>
+		</connItem>
+		<connItem className="cn.maymay.core.daos.AdminDao" connType="read">
+			<dBDriver>com.mysql.jdbc.Driver</dBDriver>
+			<dBDriverUrl>jdbc:mysql://192.168.126.55:3306/</dBDriverUrl>
+			<dBName>db_maymay</dBName>
+			<dBUser>root</dBUser>
+			<dBPwd>maymay</dBPwd>
+			<maxConnSize>1000</maxConnSize>
+			<minConnSiez>10</minConnSiez>
+		</connItem>
+	</connMap>
